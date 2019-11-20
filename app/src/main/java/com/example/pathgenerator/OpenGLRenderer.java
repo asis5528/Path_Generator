@@ -219,7 +219,7 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
             GLES31.glBindBuffer(GLES31.GL_ARRAY_BUFFER, 0);
 
 
-            GLES31.glClearColor(0, 0, 0, 1f);
+            GLES31.glClearColor(0, 0, 0, 0);
             GLES31.glClear(GLES31.GL_COLOR_BUFFER_BIT);
             GLES31.glBindVertexArray(vaoID[0]);
             GLES31.glDrawArraysInstanced(GLES31Ext.GL_LINE_STRIP_ADJACENCY_EXT, 0, count, 1);
