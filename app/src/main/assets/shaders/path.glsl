@@ -44,8 +44,8 @@ layout (lines_adjacency) in;
                 vec2 x1 = st-stlhs/startInvScale;
                 vec2 y =en+enlhs/endInvScale;
                 vec2 y1 = en-enlhs/endInvScale;
-                vec2 m = (x1-x)/15.;
-                vec2 m1 = (y1-y)/15.;
+                vec2 m = (x1-x)/division_count;
+                vec2 m1 = (y1-y)/division_count;
                 float gra;
                 mat4 cu = cut[1];
                 int ind = 0;
@@ -57,32 +57,26 @@ layout (lines_adjacency) in;
                 int i1 = int(floor(float(i/4)));
                 int i2 = i-4*i1;
                 float val = cu[i1][i2];
-                //if(val<0.0){
-              //  col = vec3(1.,0.,0.);
-             //   }
-             //   else{
-             //   col = vec3
-             //   }
                 gl_Position = vec4(x+m*float(ind),0., 1.0)*val;
                 col =gl_Position.xyz;
-                //col = vec3(1.,0.,0.);
+
 
 
                 EmitVertex();
                 gl_Position = vec4(x+m*(float(ind)+1.), 0.,1.0)*val;
                 col = gl_Position.xyz;
-                 //col = vec3(1.,0.,0.);
+
                 EmitVertex();
                 gl_Position =vec4(y+m1*float(ind),0., 1.0)*val;
-            col = gl_Position.xyz;
- //col = vec3(0.,1.,0.);
-           EmitVertex();
-         gl_Position = vec4(y+m1*(float(ind)+1.), 0.,1.0)*val;
-         col = gl_Position.xyz;
-          //col = vec3(0.,1.,0.);
+                col = gl_Position.xyz;
+
                EmitVertex();
-              EndPrimitive();
-              ind+=1;
+               gl_Position = vec4(y+m1*(float(ind)+1.), 0.,1.0)*val;
+               col = gl_Position.xyz;
+
+               EmitVertex();
+               EndPrimitive();
+               ind+=1;
 }
 
 

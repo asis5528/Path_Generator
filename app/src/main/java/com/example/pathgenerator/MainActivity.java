@@ -25,6 +25,7 @@ public class MainActivity extends Activity {
         //getting openglView
         openGLView = (OpenGLView) findViewById(R.id.openGLView);
         final OpenGLRenderer renderer = openGLView.renderer;
+
         //set openglview alpha to 0 so that it won't be seen in screen
         //openGLView.setAlpha(0.0f);
 
@@ -72,6 +73,9 @@ public class MainActivity extends Activity {
                                         0.0f, 0.0f, -0.0f, -0.0f,
                                         1.0f, 2.0f, 3.0f, 3.0f, 5.0f, 2.0f + a / 5000.f, 6.0f, 0.0f, 6.5f, -2.0f, 9.0f, -2.0f, 9.0f, 3.f, 6.0f, 3.f, -9.5f, -9.5f, -9.5f, -9.5f
                                 };
+                                for (int i=0;i<updated_coordinates.length;i++){
+                                    updated_coordinates[i]/=10.;
+                                }
                                 //a is updated in updated_coordinates[]
                                 a += 1;
                                 //Path Subdivision data
@@ -96,7 +100,7 @@ public class MainActivity extends Activity {
                                 //update the path coordinates data
                                 renderer.coordinates = updated_coordinates;
                                 //update the line width
-                                renderer.line_width = 0.04f;
+                                renderer.line_width = 0.05f;
                                 // //update subdivision count here
                                 renderer.division_count = 16;
 
