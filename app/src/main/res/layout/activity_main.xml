@@ -9,7 +9,7 @@
 
     <ImageView
         android:id="@+id/imageView5"
-        android:layout_width="match_parent"
+        android:layout_width="470dp"
         android:layout_height="470dp"
         android:src="@android:drawable/btn_star_big_on" />
 

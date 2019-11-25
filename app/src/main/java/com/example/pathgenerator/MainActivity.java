@@ -1,15 +1,19 @@
 package com.example.pathgenerator;
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.view.WindowManager;
 import android.widget.ImageView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends Activity {
     private OpenGLView openGLView;
     static boolean closeLoop = false;
-    private static int a;
+    private static double a;
 
 
     @Override
@@ -53,8 +57,6 @@ public class MainActivity extends Activity {
                 renderer.division_count = 0;
 
 
-
-
                 while (true) {
 
 
@@ -69,31 +71,43 @@ public class MainActivity extends Activity {
 
                             public void run() {
                                 //path coordinates
-                                float updated_coordinates[] = {
-                                        0.0f, 0.0f, -0.0f, -0.0f,
-                                        1.0f, 2.0f, 3.0f, 3.0f, 5.0f, 2.0f + a / 5000.f, 6.0f, 0.0f, 6.5f, -2.0f, 9.0f, -2.0f, 9.0f, 3.f, 6.0f, 3.f, -9.5f, -9.5f, -9.5f, -9.5f
-                                };
-                                for (int i=0;i<updated_coordinates.length;i++){
-                                    updated_coordinates[i]/=10.;
+                                float[] updated_coordinates;
+                                float[] updated_subdivision;
+
+                                List<Point> array = new ArrayList<Point>();
+                                int k = (int) (-154-Math.round(a));
+                                array.add(new Point(-256, -256));
+                                array.add(new Point(-256, -256));
+                                array.add(new Point(-128, 128));
+                                //array.add(new Point(-128, 128));// problematic area
+                                array.add(new Point(124+k, -254));
+                                array.add(new Point(124, 128));
+                                array.add(new Point(124, 128));// problematic area
+                              //  array.add(new Point(-121, 121)); // problematic area
+                               // array.add(new Point(0, 0));
+                              //  array.add(new Point(0, 256));
+                              //  array.add(new Point(128, 0));
+                               // array.add(new Point(0, -256));
+                               // array.add(new Point(0, -128));
+                              //  array.add(new Point(128, 128));
+                               // array.add(new Point(200, 0));
+                                array.add(new Point(256, 256));
+                               // //array.add(new Point(256, 256));
+
+                                a+=0.0005f;
+
+                                updated_coordinates = new float[array.size() * 2 ];
+                                updated_subdivision = new float[ (array.size()) * 16];
+
+                                for (int i = 0 ; i < array.size(); i++) {
+                                    updated_coordinates[i * 2] = array.get(i).x / (256.00f);
+                                    updated_coordinates[i * 2 + 1] = array.get(i).y / (256.00f);
+                                    updated_subdivision[i * 16] = 1f;
+
+                                    for (int jg = 1; jg < 16; jg++) {
+                                        updated_subdivision[i * 16 + jg] = 0f;
+                                    }
                                 }
-                                //a is updated in updated_coordinates[]
-                                a += 1;
-                                //Path Subdivision data
-                                float updated_subdivision[] = {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
-                                        1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-                                        1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-                                        1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-                                        1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-                                        1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-                                        1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-                                        1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-                                        1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-                                        1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-                                        0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
-                                        0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f
-
-
-                                };
 
                                 //update the subdivision data here
                                 renderer.subdivision_data = updated_subdivision;
@@ -102,7 +116,7 @@ public class MainActivity extends Activity {
                                 //update the line width
                                 renderer.line_width = 0.05f;
                                 // //update subdivision count here
-                                renderer.division_count = 16;
+                                renderer.division_count = 1;
 
 
 
