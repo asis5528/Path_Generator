@@ -3,7 +3,7 @@
 #define PI 3.141592653589793238
                 precision mediump float;
                 layout (lines_adjacency) in;
-                layout (triangle_strip,max_vertices = 100) out;
+                layout (triangle_strip,max_vertices = 4) out;
                 out vec3 col;
                 in float g[];
                 in mat4 cut[];
@@ -65,7 +65,7 @@
 
 
 
-                    if(angle < 60.0){
+                    if(angle < 10.0){
                     color = vec3(1.,0.,0.);
                     float t = atan(start.y-prev.y,start.x-prev.x);
                     vec2 offset = vec2(0.0,line_width);
@@ -79,7 +79,7 @@
 
 
                     }
-                    if(angle1<60.0){
+                    if(angle1<10.0){
                     color = vec3(1.,0.,0.);
                     float t = atan(end.y-start.y,end.x-start.x);
                     vec2 offset = vec2(0.0,line_width);
@@ -88,7 +88,7 @@
                     y1=end.xy+offset;
 
                     }
-
+                    color = start;
                     vec2 m = (x1-x)/float(division_count);
                     vec2 m1 = (y1-y)/float(division_count);
                     float gra;
