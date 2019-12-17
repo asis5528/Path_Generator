@@ -6,7 +6,9 @@ import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 
 public class OpenGLView extends GLSurfaceView{
-    public  OpenGLRenderer renderer;
+
+    private OpenGLRenderer renderer;
+
     public OpenGLView(Context context) {
         super(context);
         init();
@@ -17,12 +19,16 @@ public class OpenGLView extends GLSurfaceView{
         init();
     }
     private void init(){
+        renderer = new OpenGLRenderer(new AssetsHelper(getContext()));
         setEGLContextClientVersion(3);
         setPreserveEGLContextOnPause(true);
         setEGLConfigChooser(8, 8, 8, 8, 16, 0);
         getHolder().setFormat(PixelFormat.TRANSPARENT);
         setZOrderOnTop(true);
-        renderer = new OpenGLRenderer(getContext());
         setRenderer(renderer);
+    }
+
+    public OpenGLRenderer getRenderer() {
+        return renderer;
     }
 }
