@@ -131,8 +131,6 @@ public class MainActivity extends Activity {
                                 0.3f, -0.9f,
                                 0.3f, -0.9f,
 
-
-
                                 -0.65876f, 0.3932f,
                                 -0.66359f, 0.39969f,
                                 -0.66842f, 0.40618f,
@@ -141,14 +139,60 @@ public class MainActivity extends Activity {
                                 -1.1f, 0.98f
                         };
 
+                        updated_coordinates = new float[]{
+                                0.29155f, -0.6961f,
+                                0.29155f, -0.6961f,
+                                0.20237267f, -0.5279025f,
+                                0.17981756f, -0.4853418f,
+                                0.15687752f, -0.44205475f,
+                                0.00112f, -0.1481f,
+                                0.00112f, -0.1481f
+                        };
+
+
+                        updated_coordinates = new float[]{
+                                1.955f, -1.629f,
+                                1.955f, -1.629f,
+
+                                0.695f, -0.028f,
+                                0.616f, 0.07f,
+                                0.537f, 0.168f,
+
+                                -0.797f, 1.87f,
+                                -0.797f, 1.87f};
+
+
+
+                        updated_coordinates = new float[]{
+
+                                // start point
+                                0.57f, -1.16f,
+                                0.57f, -1.16f,
+
+                                // first Hole
+                                0.41f, -0.91f,
+                                0.38f, -0.86f,
+                                0.35f, -0.81f,
+
+                                // second Hole
+                                -0.14f, 0.11f,
+                                -0.17f, 0.17f,
+                                -0.2f, 0.23f,
+
+                                // third Hole
+                                -0.31f, 0.44f,
+                                -0.34f, 0.5f,
+                                -0.37f, 0.56f,
+
+                                // end point
+                                -0.4f, 0.61f,
+                                -0.4f, 0.61f
+                        };
 
 
                         for (int i = 0; i < updated_coordinates.length; i++) {
-                            BigDecimal decimal = new BigDecimal(updated_coordinates[i]);
-                            decimal = decimal.setScale(3, RoundingMode.FLOOR);
                             updated_coordinates[i] = updated_coordinates[i] ;
                         }
-
 
                         updated_subdivision = new float[(updated_coordinates.length) * 16];
                         for (int i = 0; i < updated_coordinates.length - 1; i++) {
@@ -160,7 +204,7 @@ public class MainActivity extends Activity {
                         }
                     }
 
-                    openGLView.getRenderer().pushNewDataset(updated_coordinates, updated_subdivision, 0.5f,
+                    openGLView.getRenderer().pushNewDataset(updated_coordinates, updated_subdivision, 0.111f,
                             new OpenGLRenderer.TileProviderInterface() {
                         @Override
                         public void bitmapDone(final Bitmap bitmap) {
@@ -182,6 +226,8 @@ public class MainActivity extends Activity {
             }
         }
     };
+
+
 
 
 }
