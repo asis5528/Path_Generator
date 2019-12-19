@@ -12,7 +12,7 @@
                 uniform float line_width;
                 uniform int division_count;
 
-                const float MiterLimit = 12.75;
+                const float MiterLimit = -1.0;
 
                 /*
 
