@@ -6,6 +6,7 @@ public class Bitam {
     //bitmap variable
     private static Bitmap a;
     private static boolean state = false;
+    public static int max_att = 0;
     public Bitam(){
 
     }
