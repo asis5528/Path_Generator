@@ -6,6 +6,7 @@ public class Bitam {
     //bitmap variable
     private static Bitmap a;
     private static boolean state = false;
+    private static boolean supportsGeometryShader = false;
     public static int max_att = 0;
     public Bitam(){
 
@@ -22,6 +23,15 @@ public class Bitam {
     public static boolean getState(){
         return state;
     }
+
+    public static void setCompatibilityStatus(boolean state){
+        supportsGeometryShader = state;
+    }
+
+    public static boolean getCompatibilityStatus(){
+        return  supportsGeometryShader;
+    }
+
     //getting opengl generated bitmap
     public static Bitmap getVal(){
         return a;

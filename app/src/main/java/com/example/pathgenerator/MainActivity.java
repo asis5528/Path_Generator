@@ -64,6 +64,7 @@ public class MainActivity extends Activity {
 
                     //state of opengl whether it finished rendering or not
                     boolean state = com.example.pathgenerator.Bitam.getState();
+                    System.out.println(com.example.pathgenerator.Bitam.getCompatibilityStatus());
 
                     if (state) {
 
@@ -71,13 +72,13 @@ public class MainActivity extends Activity {
                             @Override
 
                             public void run() {
-                                int max_attribute = Bitam.max_att;
-                               System.out.println(Bitam.max_att);
+                               int max_attribute = Bitam.max_att;
+                               //System.out.println(Bitam.max_att);
                                if(max_attribute>16){
-                                   System.out.println("Supports 64 subdivision");
+                                   //System.out.println("Supports 64 subdivision");
                                }
                                else{
-                                   System.out.println("Supports 48 subdivision");
+                                   //System.out.println("Supports 48 subdivision");
                                }
 
                                 //path coordinates

@@ -1,7 +1,6 @@
 package com.example.pathgenerator;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Shader;
 import android.opengl.GLES30;
 import android.opengl.GLES31;
 import android.opengl.GLES31Ext;
@@ -16,6 +15,10 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
+
+import static com.example.pathgenerator.Bitam.getCompatibilityStatus;
+import static com.example.pathgenerator.Bitam.setCompatibilityStatus;
+
 
 
 public class OpenGLRenderer implements GLSurfaceView.Renderer {
@@ -46,93 +49,89 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
 
 
     public void onSurfaceCreated(GL10 gl10, EGLConfig eglConfig) {
-
-        int ii[]=new int[1];
-        //Checking max count of vertex attributes available for this device
-        GLES31.glGetIntegerv(GLES31.GL_MAX_VERTEX_ATTRIBS,ii,0);
-        com.example.pathgenerator.Bitam.max_att = ii[0];
-
-
-        vaoID = new int[1];
-        vboID = new int[1];
-        gr = new int[1];
-
-        //generation of buffer data for subdivision path data
-        GLES31.glGenBuffers(1,gr,0);
-        GLES31.glBindBuffer(GLES31.GL_ARRAY_BUFFER,gr[0]);
-        //Uploading buffer data for subdivision path data to gpu
-        GLES31.glBindBuffer(GLES31.GL_ARRAY_BUFFER,0);
-
-        //enable blending for transparency
-        GLES31.glEnable(GLES31.GL_BLEND);
-        GLES31.glBlendFunc(GLES31.GL_SRC_ALPHA,GLES31.GL_ONE_MINUS_SRC_ALPHA);
-
-       //generating vertex array object
-        GLES31.glGenVertexArrays(1,vaoID,0);
-        GLES31.glBindVertexArray(vaoID[0]);
-        //generation of buffer data for path's coordinate(vertex data)
-        GLES31.glGenBuffers(1,vboID,0);
-        GLES31.glBindBuffer(GLES31.GL_ARRAY_BUFFER,vboID[0]);
-        //Uploading buffer data for path's coordinate to gpu
-       // GLES31.glBufferData(GLES31.GL_ARRAY_BUFFER,0,0,GLES31.GL_DYNAMIC_DRAW);
-        GLES31.glVertexAttribPointer(0,2,GLES31.GL_FLOAT,false,2*4,0);
-        GLES31.glEnableVertexAttribArray(0);
-        GLES31.glBindBuffer(GLES31.GL_ARRAY_BUFFER,0);
-
-
-        GLES31.glBindVertexArray(0);
-        GLES31.glBindVertexArray(vaoID[0]);
-        GLES31.glBindBuffer(GLES30.GL_ARRAY_BUFFER,0);
-        GLES31.glBindVertexArray(0);
-
-        //vertex shader source
-        String VertexSource = ReadFromfile("shaders/path.vert",context);
-        //fragment shader source
-        String FragmentSource = ReadFromfile("shaders/path.frag",context);
-        //geometry shader source
         String GeometrySource = ReadFromfile("shaders/path.glsl",context);
+        boolean check = checkGeometry(GeometrySource);
+        setCompatibilityStatus(check);
+        if(getCompatibilityStatus()) {
+            int ii[] = new int[1];
+            //Checking max count of vertex attributes available for this device
+            GLES31.glGetIntegerv(GLES31.GL_MAX_VERTEX_ATTRIBS, ii, 0);
 
 
-        //creation of vertex shader
-        //creation of vertex shader
-        vertexShader =  createShader(VertexSource, GLES31.GL_VERTEX_SHADER);
-        fragmentShader =  createShader(FragmentSource, GLES31.GL_FRAGMENT_SHADER);
-        geometryShader =  createShader(GeometrySource, GLES31Ext.GL_GEOMETRY_SHADER_EXT);
+            com.example.pathgenerator.Bitam.max_att = ii[0];
+            vaoID = new int[1];
+            vboID = new int[1];
+            gr = new int[1];
 
-        //shader program
-        ShaderProgram = GLES31.glCreateProgram();
-        GLES31.glAttachShader(ShaderProgram,vertexShader);
-        GLES31.glAttachShader(ShaderProgram,fragmentShader);
-        GLES31.glAttachShader(ShaderProgram,geometryShader);
+            //generation of buffer data for subdivision path data
+            GLES31.glGenBuffers(1, gr, 0);
+            GLES31.glBindBuffer(GLES31.GL_ARRAY_BUFFER, gr[0]);
+            //Uploading buffer data for subdivision path data to gpu
+            GLES31.glBindBuffer(GLES31.GL_ARRAY_BUFFER, 0);
 
-        int[] compiled = new int[1];
+            //enable blending for transparency
+            GLES31.glEnable(GLES31.GL_BLEND);
+            GLES31.glBlendFunc(GLES31.GL_SRC_ALPHA, GLES31.GL_ONE_MINUS_SRC_ALPHA);
 
-
-
-
-
-
-
-        //binding vertex attribute location
-        bindLocations(ShaderProgram);
-
-        GLES31.glLinkProgram(ShaderProgram);
-
-        GLES31.glGetProgramiv(ShaderProgram,GLES31.GL_LINK_STATUS,compiled,0);
-        //Path width
-        line_location = GLES31.glGetUniformLocation(ShaderProgram,"line_width");
-        //Subdivision count per coordinates
-        count_location = GLES31.glGetUniformLocation(ShaderProgram,"division_count");
+            //generating vertex array object
+            GLES31.glGenVertexArrays(1, vaoID, 0);
+            GLES31.glBindVertexArray(vaoID[0]);
+            //generation of buffer data for path's coordinate(vertex data)
+            GLES31.glGenBuffers(1, vboID, 0);
+            GLES31.glBindBuffer(GLES31.GL_ARRAY_BUFFER, vboID[0]);
+            //Uploading buffer data for path's coordinate to gpu
+            // GLES31.glBufferData(GLES31.GL_ARRAY_BUFFER,0,0,GLES31.GL_DYNAMIC_DRAW);
+            GLES31.glVertexAttribPointer(0, 2, GLES31.GL_FLOAT, false, 2 * 4, 0);
+            GLES31.glEnableVertexAttribArray(0);
+            GLES31.glBindBuffer(GLES31.GL_ARRAY_BUFFER, 0);
 
 
+            GLES31.glBindVertexArray(0);
+            GLES31.glBindVertexArray(vaoID[0]);
+            GLES31.glBindBuffer(GLES30.GL_ARRAY_BUFFER, 0);
+            GLES31.glBindVertexArray(0);
 
-        //check if shader linking is compiled or not
-        if(compiled[0]==0){
-            Log.e ( "not", GLES31.glGetProgramInfoLog ( ShaderProgram ) );
+            //vertex shader source
+            String VertexSource = ReadFromfile("shaders/path.vert", context);
+            //fragment shader source
+            String FragmentSource = ReadFromfile("shaders/path.frag", context);
+            //geometry shader source
+
+
+            //creation of vertex shader
+            //creation of vertex shader
+            vertexShader = createShader(VertexSource, GLES31.GL_VERTEX_SHADER);
+            fragmentShader = createShader(FragmentSource, GLES31.GL_FRAGMENT_SHADER);
+            geometryShader = createShader(GeometrySource, GLES31Ext.GL_GEOMETRY_SHADER_EXT);
+
+            //shader program
+            ShaderProgram = GLES31.glCreateProgram();
+            GLES31.glAttachShader(ShaderProgram, vertexShader);
+            GLES31.glAttachShader(ShaderProgram, fragmentShader);
+            GLES31.glAttachShader(ShaderProgram, geometryShader);
+
+            int[] compiled = new int[1];
+
+
+            //binding vertex attribute location
+            bindLocations(ShaderProgram);
+
+            GLES31.glLinkProgram(ShaderProgram);
+
+            GLES31.glGetProgramiv(ShaderProgram, GLES31.GL_LINK_STATUS, compiled, 0);
+            //Path width
+            line_location = GLES31.glGetUniformLocation(ShaderProgram, "line_width");
+            //Subdivision count per coordinates
+            count_location = GLES31.glGetUniformLocation(ShaderProgram, "division_count");
+
+
+            //check if shader linking is compiled or not
+            if (compiled[0] == 0) {
+                Log.e("not", GLES31.glGetProgramInfoLog(ShaderProgram));
+
+            }
 
         }
-
-
 
     }
 
@@ -145,9 +144,6 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
         GLES31.glViewport(0,0,512,512);
         GLES31.glUseProgram(ShaderProgram);
         int res = GLES31.glGetUniformLocation(ShaderProgram,"res");
-        System.out.println(i);
-        System.out.println(i1);
-
         GLES31.glUniform2f(res,width,height);
 
 
@@ -157,7 +153,7 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onDrawFrame(GL10 gl10) {
         boolean state = com.example.pathgenerator.Bitam.getState();
-        if(!state) {
+        if(!state && getCompatibilityStatus()) {
 
             GLES31.glUniform1f(line_location,line_width);
             GLES31.glUniform1i(count_location,division_count);
@@ -317,8 +313,27 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
         GLES31.glGetShaderiv(shader,GLES31.GL_COMPILE_STATUS,compiled,0);
         if(compiled[0]==0){
             throw new RuntimeException("failed To compile shader " + type + "\n" + GLES31.glGetShaderInfoLog(shader));
+            //setCompatibilityStatus(false);
         }
         return shader;
+    }
+    private boolean checkGeometry(String source){
+        int shader = GLES31.glCreateShader(GLES31Ext.GL_GEOMETRY_SHADER_EXT);
+        GLES31.glShaderSource(shader,source);
+        GLES31.glCompileShader(shader);
+        int[] compiled = new int[1];
+        GLES31.glGetShaderiv(shader,GLES31.GL_COMPILE_STATUS,compiled,0);
+        GLES31.glDeleteShader(shader);
+        if(compiled[0]==0){
+           // throw new RuntimeException("failed To compile shader " + type + "\n" + GLES31.glGetShaderInfoLog(shader));
+            //setCompatibilityStatus(false);
+            return false;
+        }
+        else {
+            return true;
+        }
+
+
     }
 
     private   String ReadFromfile(String fileName, Context context) {
@@ -338,7 +353,6 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
 
             while ((line = input.readLine()) != null) {
                 returnString.append(System.getProperty("line.separator"));
-                System.out.println(line);
                 returnString.append(line);
             }
         } catch (Exception e) {
